@@ -50,7 +50,7 @@ Vous trouverez en fin de fichier des exemples de TEST et de TRACE D'EXÉCUTION.
 type symbol =
   | D (* Debut de ruban *)
   | B (* Blanc *)
-  | S (* Sarateur *)
+  | S (* Separateur *)
   | Z (* bit Zero *)
   | U (* bit Unity *)
 
