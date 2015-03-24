@@ -219,21 +219,21 @@ module Band =
 	  | s::ms -> { left = band.head::band.left ; head = s ; right = ms }
 		    
     let (move_head_left: band -> band) = fun band ->
-	  ........................................
-	  ......................................................................................................................................
-	  ......................................................................................................................................
+	  match band.left with
+	  | []    -> { left = [] ; head = B ; right = band.head::band.right }
+	  | s::ms -> { left = ms ; head = s ; right = band.head::band.right }
 
 	    
     let (do_move: moving -> band -> band) = fun moving band ->
 	  match moving with
 	  | Left  -> move_head_left band
-	  | Right -> ........................................
-	  | Here  -> ........
+	  | Right -> move_head_right band
+	  | Here  -> band
 		    
     let (do_write: writing -> band -> band) = fun writing band ->
-	........................................
-	  ..............................................................................
-	  ..............................
+	match writing with
+	  | No_Write -> band
+	  | Write_smb -> {left = band.left;head = Write_smb ;right = band.right}
 
 	    
     let (update_wrt: (writing * moving) -> band -> band) = fun (writing,moving) band ->
@@ -285,7 +285,7 @@ module Configuration =
 		
 		)
 	  in 
-            let enabled_transitions = List.filter ........................................transitions
+            let enabled_transitions = List.filter is_enabled transitions
 	    in
 	      match enabled_transitions with
 	      | [] ->  ..........................................................
