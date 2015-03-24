@@ -233,7 +233,7 @@ module Band =
     let (do_write: writing -> band -> band) = fun writing band ->
 	match writing with
 	  | No_Write -> band
-	  | Write_smb -> {left = band.left;head = Write_smb ;right = band.right}
+	  | Write_smb s -> {left = band.left;head = s ;right = band.right}
 
 	    
     let (update_wrt: (writing * moving) -> band -> band) = fun (writing,moving) band ->
@@ -277,19 +277,30 @@ module Configuration =
 		  else { cfg with status = Final }
 
     and (one_step: turing_machine -> configuration -> configuration) = fun mt cfg ->
-	  let (is_outgoing: transition -> bool) = fun (src,_,_) -> ..............................
+	  let (is_outgoing: transition -> bool) = fun (src,_,_) -> 
+	  match src with
+		| Qacc -> true
+		| Qrej -> false
+		| Q(i) -> false
 
 	  and (is_enabled: transition -> bool) = fun (_,action,_) ->
 		(match action with
-		| Action( Match(pattern), _, _) -> ..........................................................................
+		| Action( Match(pattern), _, _) ->
+			match pattern with
+			| ANY -> true
+			| SMB a -> false
+			| BUT a -> false
+			| IN  aS -> true
+			| OUT aS -> false
 		
 		)
 	  in 
-            let enabled_transitions = List.filter is_enabled transitions
+        let enabled_transitions = List.filter is_enabled mt.transitions
+	    
 	    in
 	      match enabled_transitions with
-	      | [] ->  ..........................................................
-	      | [transition] -> ..........................................
+	      | [] -> cfg
+	      | [transition] -> cfg
 	      | _ -> failwith "non deterministic MT in one_step"
 				
 	  
@@ -345,7 +356,7 @@ TM.to_end ;;
 
 (* initialisation de la configuration de départ *)
 	  
-initialize TM.dup [U;Z;U] ;;
+(*initialize TM.dup [U;Z;U] ;;  todo *)
 
 (* Pour une execution pas à pas, utilisez 
 	  one_step () ;;
